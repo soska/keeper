@@ -10,7 +10,8 @@ import { injectGlobal } from 'styled-components';
 
 injectGlobal`
   body {
-    background:#f3f3f0;
+    background:#f9f9f9;
+    background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAADCAYAAABWKLW/AAAAGklEQVQYV2NkQAKMIPbLly//i4uLM4I5MAAATV0EBCOd14sAAAAASUVORK5CYII=);
     font-family:menlo,courier,mono;
   }
 `;
