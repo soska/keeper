@@ -8,6 +8,8 @@ import {createItem, getItems} from '../data/modules/items';
 const FormWrapper = styled.div`
   display:flex;
   font-family:menlo,courier,mono;
+  padding:11px;
+  background:#ededed;
 `;
 
 const Form = styled.form`
@@ -16,9 +18,16 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  padding:22px;
+  padding:11px;
   flex:1;
   font-size:18px;
+  border:none;
+  font-family:menlo,courier,mono;
+  &::placeholder{
+   text-transform:uppercase;
+   color:#bbb;
+   letter-spacing:0.125em;
+  }
 `;
 
 class TodoForm extends Component {

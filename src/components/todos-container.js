@@ -1,12 +1,12 @@
 import React from 'react';
 import {STATUS_DONE} from '../utils/constants';
 import getStatusGlyph from '../utils/status-glyph';
+import EmptyList from './empty-list';
 import {connect} from 'react-redux';
 import styled from 'styled-components';
 import {toggleItemDoneStatus, deleteItem, getItems} from '../data/modules/items';
 
 const TodosWrapper = styled.div`
-  // padding:22px;
   display:flex;
   flex-direction:column;
 `;
@@ -99,7 +99,13 @@ class TodosContainer extends React.Component{
 
   render(){
 
-    const {items} = this.props;
+    const {items, list} = this.props;
+
+    if (!items.length) {
+      return (
+        <EmptyList list={list}/>
+      );
+    }
 
     return (
       <TodosWrapper>

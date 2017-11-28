@@ -6,13 +6,18 @@ import ListPicker from './list-picker';
 
 
 const WrapperDiv = styled.div`
+  max-width:50em;
+  margin:22px auto;
+  background:white;
+  border-radius:3px;
+  border:1px solid #d9d9d9;
 `;
 
 const AppContainer = ({list})=>(
   <WrapperDiv>
     <ListPicker list={list}/>
-    <Todos list={list}/>
     <TodoForm list={list}/>
+    <Todos list={list}/>
   </WrapperDiv>
 );
 
