@@ -14,8 +14,6 @@ const initialState = [];
  */
 
 export const setItems = createAction('@ITEMS/SET');
-// export const toggleItemDoneStatus = createAction('@ITEMS/TOGGLE_DONE_STATUS');
-
 
 export const createItem = (title, list=null) => dispatch => new Promise((resolve, reject)=>{
   const newItem = itemFactory(title, list);
@@ -24,9 +22,16 @@ export const createItem = (title, list=null) => dispatch => new Promise((resolve
   });
 });
 
-export const toggleItemDoneStatus = (item, list=null) => dispatch => new Promise((resolve, reject)=>{
+export const toggleItemDoneStatus = (item) => dispatch => new Promise((resolve, reject)=>{
   const status = item.status === STATUS_DONE ? STATUS_PENDING : (STATUS_PENDING) ? STATUS_DONE : item.status;
   const updatedItem = {...item,status};
+  API.update(updatedItem).then(item=>{
+    resolve(item);
+  });
+});
+
+export const moveItem = (item, list=null) => dispatch => new Promise((resolve, reject)=>{
+  const updatedItem = {...item,list};
   API.update(updatedItem).then(item=>{
     resolve(item);
   });

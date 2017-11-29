@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import {withRouter, Link} from 'react-router-dom';
 import {SingleDatePicker} from 'react-dates';
 import moment from 'moment';
 import styled from 'styled-components';
 import isToday from '../utils/is-today.js';
+import {getYesterday, getNext, getPrev} from '../utils/get-list-name.js';
 
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
@@ -29,7 +30,7 @@ const ListTitle = styled.div`
 `;
 
 
-const TodayLink = styled(Link)`
+const NavLink = styled(Link)`
   display:block;
   padding:12px;
   border:1px solid #ccc;
@@ -41,12 +42,13 @@ const TodayLink = styled(Link)`
   }
 `;
 
-const TodayGlyph = styled.span`
+const NavGlyph = styled.span`
   font-size:14px;
   font-weight:bold;
   display:inline-block;
   color:#999;
   margin-left:6px;
+  margin-right:6px;
 `;
 
 class ListPicker extends React.Component{
@@ -60,6 +62,33 @@ class ListPicker extends React.Component{
     this.props.history.push(`/${list}`);
   }
 
+  renderShortcuts(){
+    const {list} = this.props;
+    const today = isToday(list);
+    return(
+      <Fragment>
+        {!today && (
+          <NavLink to='/'>
+            Go to Today
+          </NavLink>
+        )}
+        <NavLink to={`/${getPrev(list)}`}>
+          <NavGlyph>&larr;</NavGlyph>
+        </NavLink>
+        <NavLink to={`/${getNext(list)}`}>
+          <NavGlyph>&rarr;</NavGlyph>
+        </NavLink>
+        {/*today && (
+          <TodayLink to={`/${getYesterday()}`}>
+            <TodayGlyph>&larr;</TodayGlyph>
+            Yesterday
+          </TodayLink>
+        )*/}
+
+      </Fragment>
+    )
+  }
+
   render(){
     const {list} = this.props;
     const date = moment(list);
@@ -67,20 +96,9 @@ class ListPicker extends React.Component{
     return (
       <PickerBar>
         <ListTitle>
-          {today ? '★ Today\'s stuff' : moment(list).format('LL')}
+          {today ? '★ Today\'s stuff' : date.format('LL')}
         </ListTitle>
-        {today && (
-          <TodayLink to={`/${moment().subtract(1,'day').format('YYYY-MM-DD')}`}>
-            <TodayGlyph>&larr;</TodayGlyph>
-            Yesterday
-          </TodayLink>
-        )}
-        {!today && (
-          <TodayLink to='/'>
-            Today
-            <TodayGlyph>&rarr;</TodayGlyph>
-          </TodayLink>
-        )}
+        {this.renderShortcuts()}
         <SingleDatePicker
           date={date} // momentPropTypes.momentObj or null
           onDateChange={this.handleDateChange} // PropTypes.func.isRequired

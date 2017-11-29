@@ -4,7 +4,9 @@ import getStatusGlyph from '../utils/status-glyph';
 import EmptyList from './empty-list';
 import {connect} from 'react-redux';
 import styled from 'styled-components';
-import {toggleItemDoneStatus, deleteItem, getItems} from '../data/modules/items';
+import {toggleItemDoneStatus, deleteItem, getItems, moveItem} from '../data/modules/items';
+import isToday from '../utils/is-today.js';
+import {getToday, getTomorrow} from '../utils/get-list-name.js';
 
 const TodosWrapper = styled.div`
   display:flex;
@@ -57,10 +59,11 @@ const TodoTitle = ({title, status})=>(
 );
 
 
-const TodoItem = ({item, onToggle, onDelete})=>(
+const TodoItem = ({item, onToggle, onDelete, onMove})=>(
   <ItemWrapper onClick={onToggle}>
     <TodoBullet status={item.status}/>
     <TodoTitle title={item.title} status={item.status}/>
+    <ItemButton onClick={onMove}>→</ItemButton>
     <ItemButton onClick={onDelete}>×</ItemButton>
   </ItemWrapper>
 );
@@ -97,6 +100,14 @@ class TodosContainer extends React.Component{
     })
   }
 
+  handleMove = item => {
+    const {list, moveItem} = this.props;
+    const moveTo = isToday(list) ? getTomorrow() : getToday();
+    moveItem(item, moveTo).then(()=>{
+      this.getData();
+    })
+  }
+
   render(){
 
     const {items, list} = this.props;
@@ -121,6 +132,10 @@ class TodosContainer extends React.Component{
               e.preventDefault();
               this.handleDelete(item)
             }}
+            onMove={e=>{
+              e.preventDefault();
+              this.handleMove(item)
+            }}
             />
         ))}
       </TodosWrapper>
@@ -133,6 +148,7 @@ export default connect(
   {
     toggle:toggleItemDoneStatus,
     deleteItem,
-    getItems
+    getItems,
+    moveItem
   }
 )(TodosContainer);
